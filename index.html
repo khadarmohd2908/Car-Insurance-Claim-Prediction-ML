@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Car Insurance Claim Predictor</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Inter", sans-serif;
+        background: #f4f7fb;
+        color: #172033;
+    }
+
+    /* NAVBAR */
+    nav {
+        height: 72px;
+        background: #ffffff;
+        border-bottom: 1px solid #e7ebf2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 7%;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #5b5ce2, #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+    }
+
+    .nav-tag {
+        background: #eef0ff;
+        color: #5756d6;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* HERO */
+    .hero {
+        padding: 70px 7% 45px;
+        background:
+            radial-gradient(circle at 85% 20%, rgba(112, 99, 255, 0.15), transparent 30%),
+            radial-gradient(circle at 10% 30%, rgba(0, 180, 216, 0.10), transparent 30%),
+            #f8faff;
+    }
+
+    .hero-content {
+        max-width: 1100px;
+        margin: auto;
+        text-align: center;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 8px 15px;
+        background: #edeaff;
+        color: #5b55d6;
+        border-radius: 25px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 18px;
+    }
+
+    .hero h1 {
+        font-size: clamp(35px, 5vw, 62px);
+        line-height: 1.08;
+        font-weight: 800;
+        letter-spacing: -2px;
+        margin-bottom: 20px;
+    }
+
+    .gradient-text {
+        background: linear-gradient(90deg, #5554db, #8a4ff3, #0e9fd1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+        max-width: 700px;
+        margin: auto;
+        color: #657084;
+        line-height: 1.7;
+        font-size: 16px;
+    }
+
+    /* MAIN */
+    .main {
+        width: 90%;
+        max-width: 1100px;
+        margin: 35px auto 80px;
+    }
+
+    .dashboard {
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 25px;
+    }
+
+    .card {
+        background: white;
+        border: 1px solid #e7ebf2;
+        border-radius: 22px;
+        padding: 30px;
+        box-shadow: 0 12px 35px rgba(30, 40, 70, 0.07);
+    }
+
+    .card-title {
+        font-size: 21px;
+        font-weight: 800;
+        margin-bottom: 7px;
+    }
+
+    .card-subtitle {
+        color: #7a8495;
+        font-size: 13px;
+        margin-bottom: 28px;
+    }
+
+    /* FORM */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 19px;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #384256;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1px solid #dce1eb;
+        border-radius: 11px;
+        background: #fafbfe;
+        color: #20283a;
+        font-family: inherit;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #6864e8;
+        box-shadow: 0 0 0 3px rgba(104, 100, 232, 0.10);
+        background: white;
+    }
+
+    .full {
+        grid-column: 1 / -1;
+    }
+
+    .predict-btn {
+        width: 100%;
+        border: none;
+        margin-top: 25px;
+        padding: 16px;
+        border-radius: 12px;
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        background: linear-gradient(90deg, #5b5ce2, #8054e9);
+        box-shadow: 0 10px 22px rgba(91, 92, 226, 0.25);
+        transition: 0.25s;
+    }
+
+    .predict-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(91, 92, 226, 0.32);
+    }
+
+    .reset-btn {
+        width: 100%;
+        margin-top: 10px;
+        padding: 12px;
+        border: 1px solid #dce1eb;
+        background: white;
+        border-radius: 11px;
+        cursor: pointer;
+        color: #5d6678;
+        font-weight: 600;
+    }
+
+    /* RESULT */
+    .result-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .result-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .status {
+        padding: 7px 12px;
+        background: #f0f1ff;
+        color: #5b5ce2;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .result-box {
+        margin-top: 35px;
+        padding: 30px 20px;
+        border-radius: 18px;
+        background: linear-gradient(145deg, #f7f7ff, #eef9ff);
+        text-align: center;
+    }
+
+    .result-icon {
+        width: 68px;
+        height: 68px;
+        margin: auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        font-size: 30px;
+        box-shadow: 0 8px 25px rgba(30, 40, 70, 0.08);
+    }
+
+    .result-text {
+        font-size: 25px;
+        font-weight: 800;
+        margin-top: 18px;
+    }
+
+    .probability {
+        color: #667085;
+        font-size: 13px;
+        margin-top: 7px;
+    }
+
+    .progress {
+        height: 9px;
+        background: #dfe4ed;
+        border-radius: 20px;
+        margin-top: 20px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 0%;
+        border-radius: 20px;
+        background: linear-gradient(90deg, #5b5ce2, #9b5de5);
+        transition: width 0.6s ease;
+    }
+
+    .result-note {
+        margin-top: 20px;
+        color: #7a8495;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    /* STATS */
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 25px;
+    }
+
+    .stat {
+        background: white;
+        border: 1px solid #e7ebf2;
+        border-radius: 17px;
+        padding: 20px;
+    }
+
+    .stat-number {
+        font-size: 25px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: #7a8495;
+        font-size: 12px;
+    }
+
+    /* INFO */
+    .info {
+        margin-top: 25px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .info-card {
+        background: white;
+        border: 1px solid #e7ebf2;
+        border-radius: 18px;
+        padding: 25px;
+    }
+
+    .info-icon {
+        font-size: 25px;
+        margin-bottom: 13px;
+    }
+
+    .info-card h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .info-card p {
+        color: #727c8d;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+        text-align: center;
+        padding: 30px;
+        border-top: 1px solid #e7ebf2;
+        color: #7a8495;
+        font-size: 12px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 850px) {
+        .dashboard {
+            grid-template-columns: 1fr;
+        }
+
+        .info {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        nav {
+            padding: 0 5%;
+        }
+
+        .nav-tag {
+            display: none;
+        }
+
+        .hero {
+            padding: 50px 5% 30px;
+        }
+
+        .main {
+            width: 94%;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .full {
+            grid-column: auto;
+        }
+
+        .stats {
+            grid-template-columns: 1fr;
+        }
+
+        .card {
+            padding: 22px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <div class="logo-icon">🚗</div>
+        InsureAI
+    </div>
+
+    <div class="nav-tag">
+        Machine Learning
+    </div>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+
+        <div class="badge">
+            ✦ AI-Powered Insurance Prediction
+        </div>
+
+        <h1>
+            Car Insurance
+            <span class="gradient-text">Claim Predictor</span>
+        </h1>
+
+        <p>
+            Predict the likelihood of an insurance claim using a
+            machine learning model trained on customer, vehicle,
+            and policy information.
+        </p>
+
+    </div>
+</section>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <div class="dashboard">
+
+        <!-- INPUT FORM -->
+        <div class="card">
+
+            <div class="card-title">
+                Customer Information
+            </div>
+
+            <div class="card-subtitle">
+                Enter customer and vehicle details to generate a prediction.
+            </div>
+
+            <form id="predictionForm">
+
+                <div class="form-grid">
+
+                    <div class="input-group">
+                        <label>Age</label>
+                        <input type="number" id="age" min="18" max="100" placeholder="e.g. 35" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Driving License</label>
+                        <select id="license">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Region Code</label>
+                        <input type="number" id="region" min="1" max="50" placeholder="e.g. 28" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Previously Insured</label>
+                        <select id="insured">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vehicle Age</label>
+                        <select id="vehicleAge">
+                            <option value="< 1 Year">< 1 Year</option>
+                            <option value="1-2 Year">1-2 Years</option>
+                            <option value="> 2 Years">> 2 Years</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vehicle Damage</label>
+                        <select id="damage">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Annual Premium</label>
+                        <input type="number" id="premium" placeholder="e.g. 45000" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Policy Sales Channel</label>
+                        <input type="number" id="channel" min="1" max="160" placeholder="e.g. 26" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Vintage (Days)</label>
+                        <input type="number" id="vintage" min="1" max="365" placeholder="e.g. 180" required>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="predict-btn">
+                    🔍 Predict Insurance Claim
+                </button>
+
+                <button type="button" class="reset-btn" onclick="resetForm()">
+                    Reset Form
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- RESULT -->
+        <div class="card result-card">
+
+            <div class="result-top">
+                <div class="card-title">
+                    Prediction Result
+                </div>
+
+                <div class="status">
+                    MODEL READY
+                </div>
+            </div>
+
+            <div class="result-box">
+
+                <div class="result-icon" id="resultIcon">
+                    🤖
+                </div>
+
+                <div class="result-text" id="resultText">
+                    Awaiting Input
+                </div>
+
+                <div class="probability" id="probability">
+                    Enter customer details to generate a prediction.
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+
+            </div>
+
+            <p class="result-note">
+                This prediction is generated by a machine learning model.
+                It should be used as analytical support and not as the
+                sole basis for insurance decisions.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATS -->
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-number">1,000+</div>
+            <div class="stat-label">Customer Records</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number">5</div>
+            <div class="stat-label">ML Models Evaluated</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Predictive Features</div>
+        </div>
+
+    </div>
+
+
+    <!-- INFORMATION -->
+    <div class="info">
+
+        <div class="info-card">
+            <div class="info-icon">🧹</div>
+            <h3>Data Preparation</h3>
+            <p>
+                Data cleaning, missing-value handling,
+                categorical encoding, and feature preparation.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon">🤖</div>
+            <h3>Machine Learning</h3>
+            <p>
+                Classification models including Logistic Regression,
+                KNN, Decision Tree, Random Forest, and XGBoost.
+            </p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-icon">⚙️</div>
+            <h3>Model Optimization</h3>
+            <p>
+                RandomizedSearchCV is used to tune the Random Forest
+                hyperparameters and improve model performance.
+            </p>
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+    Car Insurance Claim Prediction • Machine Learning Project
+</footer>
+
+
+<script>
+
+    const form = document.getElementById("predictionForm");
+
+    form.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        /*
+         * DEMO PREDICTION
+         * ---------------------------------
+         * This section currently generates a demo probability.
+         * Connect this function to your trained Python/Flask/FastAPI
+         * model for real ML predictions.
+         */
+
+        const age = Number(document.getElementById("age").value);
+        const damage = document.getElementById("damage").value;
+        const insured = document.getElementById("insured").value;
+        const vehicleAge = document.getElementById("vehicleAge").value;
+
+        let probability = 25;
+
+        if (damage === "Yes") {
+            probability += 30;
+        }
+
+        if (insured === "0") {
+            probability += 20;
+        }
+
+        if (vehicleAge === "> 2 Years") {
+            probability += 10;
+        }
+
+        if (age > 50) {
+            probability += 5;
+        }
+
+        probability = Math.min(probability, 95);
+
+        const resultText = document.getElementById("resultText");
+        const probabilityText = document.getElementById("probability");
+        const progressBar = document.getElementById("progressBar");
+        const resultIcon = document.getElementById("resultIcon");
+
+        progressBar.style.width = probability + "%";
+
+        if (probability >= 50) {
+
+            resultText.textContent = "Claim Likely";
+            probabilityText.textContent =
+                "Estimated claim probability: " + probability + "%";
+
+            resultIcon.textContent = "⚠️";
+
+        } else {
+
+            resultText.textContent = "Claim Unlikely";
+            probabilityText.textContent =
+                "Estimated claim probability: " + probability + "%";
+
+            resultIcon.textContent = "✅";
+        }
+
+    });
+
+
+    function resetForm() {
+
+        form.reset();
+
+        document.getElementById("resultText").textContent =
+            "Awaiting Input";
+
+        document.getElementById("probability").textContent =
+            "Enter customer details to generate a prediction.";
+
+        document.getElementById("progressBar").style.width = "0%";
+
+        document.getElementById("resultIcon").textContent = "🤖";
+    }
+
+</script>
+```
+
+</body>
+</html>
